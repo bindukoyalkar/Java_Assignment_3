@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class PingIP {
@@ -9,29 +12,28 @@ public class PingIP {
             BufferedReader inputStream = new BufferedReader(
                     new InputStreamReader(p.getInputStream()));
             String s = "";
-            int index,count=0;
+            int index;
             double timePeriod=0.0;
+            List<Double> listOfTimePeriods=new ArrayList<>();
             // reading output stream of the command
             while ((s = inputStream.readLine()) != null) {
+                //System.out.println(s);
                 if(s.contains("time=")){
                     index=s.indexOf("time=");
                     index=index+5;
-                    //System.out.println(s);
-                    s=s.substring(index,index+5);
-                    //System.out.println(s);
+                    int endIndex = s.indexOf("ms");
+                    s = s.substring(index,endIndex);
                     timePeriod=Double.parseDouble(s);
-                    count++;
+                    listOfTimePeriods.add(timePeriod);
                 }
-                if(count==2)
-                    System.out.println("Median time taken to ping the host is:"+timePeriod);
-
             }
-
+            Collections.sort(listOfTimePeriods);
+            //System.out.println(listOfTimePeriods);
+            System.out.println("Median time taken to ping the host is:"+listOfTimePeriods.get(2)+" ms");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         String ip = sc.nextLine();
